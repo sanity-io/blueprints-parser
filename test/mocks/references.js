@@ -128,7 +128,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          projects: [ 'project-1', '$.resources.a-project.name', 'project-2' ]
+          projects: ['project-1', '$.resources.a-project.name', 'project-2'],
         },
       ],
     },
@@ -142,7 +142,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          projects: [ 'project-1', 'a-project', 'project-2' ]
+          projects: ['project-1', 'a-project', 'project-2'],
         },
       ],
     },
@@ -164,10 +164,10 @@ export default {
           config: {
             settings: [
               {
-                projects: [ 'project-1', 'project-2', '$.resources.a-project.name' ]
-              }
-            ]
-          }
+                projects: ['project-1', 'project-2', '$.resources.a-project.name'],
+              },
+            ],
+          },
         },
       ],
     },
@@ -184,10 +184,10 @@ export default {
           config: {
             settings: [
               {
-                projects: [ 'project-1', 'project-2', 'a-project' ]
-              }
-            ]
-          }
+                projects: ['project-1', 'project-2', 'a-project'],
+              },
+            ],
+          },
         },
       ],
     },
@@ -201,7 +201,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          projects: [ 'project-1', 'project-2', '$.params.project' ]
+          projects: ['project-1', 'project-2', '$.params.project'],
         },
       ],
     },
@@ -211,13 +211,13 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          projects: [ 'project-1', 'project-2', 'a-project' ]
+          projects: ['project-1', 'project-2', 'a-project'],
         },
       ],
     },
 
     parameters: {
-      project: 'a-project'
+      project: 'a-project',
     },
 
     unresolved: undefined,
@@ -321,7 +321,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          projects: [ 'project-1', 'project-2', '$.resources.a-project.name', 'project-4' ]
+          projects: ['project-1', 'project-2', '$.resources.a-project.name', 'project-4'],
         },
       ],
     },
@@ -331,7 +331,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          projects: [ 'project-1', 'project-2', '$.resources.a-project.name', 'project-4' ]
+          projects: ['project-1', 'project-2', '$.resources.a-project.name', 'project-4'],
         },
       ],
     },
@@ -341,7 +341,7 @@ export default {
         path: 'resources.a-function.projects[2]',
         property: '$.resources.a-project.name',
         ref: '$.resources.a-project.name',
-        item: [ 'project-1', 'project-2', '$.resources.a-project.name', 'project-4' ],
+        item: ['project-1', 'project-2', '$.resources.a-project.name', 'project-4'],
         index: 2,
       },
     ],
@@ -356,10 +356,10 @@ export default {
           config: {
             settings: [
               {
-                projects: [ '$.resources.a-project.name', 'project-2', 'project-3' ]
-              }
-            ]
-          }
+                projects: ['$.resources.a-project.name', 'project-2', 'project-3'],
+              },
+            ],
+          },
         },
       ],
     },
@@ -372,10 +372,10 @@ export default {
           config: {
             settings: [
               {
-                projects: [ '$.resources.a-project.name', 'project-2', 'project-3' ]
-              }
-            ]
-          }
+                projects: ['$.resources.a-project.name', 'project-2', 'project-3'],
+              },
+            ],
+          },
         },
       ],
     },
@@ -385,7 +385,7 @@ export default {
         path: 'resources.a-function.config.settings[0].projects[0]',
         property: '$.resources.a-project.name',
         ref: '$.resources.a-project.name',
-        item: [ '$.resources.a-project.name', 'project-2', 'project-3' ],
+        item: ['$.resources.a-project.name', 'project-2', 'project-3'],
         index: 0,
       },
     ],

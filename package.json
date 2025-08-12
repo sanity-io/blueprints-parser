@@ -13,11 +13,14 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "npx tap run --include=test/unit/**/* --passes --coverage-report=text --coverage-report=lcov --no-browser"
+    "test": "npx tap run --include=test/unit/**/* --passes --coverage-report=text --coverage-report=lcov --no-browser",
+    "lint": "biome ci",
+    "lint:write": "biome check --write"
   },
   "license": "MIT",
   "author": "Sanity.io <hello@sanity.io>",
   "devDependencies": {
+    "@biomejs/biome": "^2.1.4",
     "ajv": "^8.17.1",
     "tap": "^21.1.0"
   }

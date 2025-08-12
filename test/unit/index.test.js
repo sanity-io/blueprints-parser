@@ -100,29 +100,31 @@ tap.test('2024-10-01', async (t) => {
   const basic = Object.entries(mocks.basic)
   const basicErrors = Object.entries(mocks.basicErrors)
   const tests =
-    basic.length * 2 +
-    // biome-ignore lint: allow tests to opt out of JSON Schema validation, when it's not as flexible as regular logic
-    basicErrors.reduce((a, [, b]) => (b.metadata?.ignore ? ++a : (a += 2)), 0)
+    basic.length * 3 +
+    // allow tests to opt out of JSON Schema validation, when it's not as flexible as regular logic
+    basicErrors.reduce((a, [, b]) => a + (b.metadata?.ignore ? 1 : 3), 0)
   t.plan(tests)
 
   // Check the basic structure of a document
   for (const [name, input] of basic) {
-    const {blueprint, errors} = blueprintParserValidator(input)
+    const {errors} = blueprintParserValidator(input)
     t.notOk(errors, `${name}: parser / validator found no issues`)
     if (errors?.length) console.log(`${name} errors:`, errors)
 
     const valid = ajv.validate(jsonSchema20241001, input)
+    t.ok(valid, `${name}: JSON Schema validator found no issues`)
     t.notOk(ajv.errors, `${name}: JSON Schema validator found no issues`)
     if (ajv.errors?.length) console.log(`${name} errors (AJV):`, ajv.errors)
   }
 
   // Basic validation errors
   for (const [name, input] of basicErrors) {
-    const {blueprint, errors} = blueprintParserValidator(input)
+    const {errors} = blueprintParserValidator(input)
     t.ok(errors, `${name}: parser / validator found an error`)
 
     if (!input.metadata?.ignore) {
       const valid = ajv.validate(jsonSchema20241001, input)
+      t.notOk(valid, `${name}: JSON Schema validator found an error`)
       t.ok(ajv.errors, `${name}: JSON Schema validator found an error`)
     }
   }

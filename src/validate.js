@@ -1,5 +1,4 @@
 import {
-  firstVersion,
   formatProperties,
   nameFormat,
   parameterTypes,

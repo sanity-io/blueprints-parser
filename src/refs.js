@@ -1,9 +1,7 @@
-import {firstVersion} from './constants.js'
 import is from './is.js'
 export default {find, resolve}
 
 function find(rawBlueprint, options) {
-  const {resources, parameters, outputs} = rawBlueprint
   const {debug} = options
   const foundRefs = []
 
@@ -51,7 +49,7 @@ function resolve(rawBlueprint, foundRefs, options) {
   const unresolvedRefs = []
   const refErrors = []
   for (const foundRef of foundRefs) {
-    const {path, property, ref, item} = foundRef
+    const {property, ref, item} = foundRef
     const refPath = ref.replace(/^\$\./, '')
     // Early return from an already found reference
     if (refs[refPath]) {
@@ -68,7 +66,7 @@ function resolve(rawBlueprint, foundRefs, options) {
         refs[refPath] = found
         if (is.object(item)) item[property] = refs[refPath]
         if (is.array(item)) {
-          const index = item.findIndex(i => i === property)
+          const index = item.findIndex((i) => i === property)
           item[index] = refs[refPath]
         }
       } else {
@@ -89,7 +87,7 @@ function resolve(rawBlueprint, foundRefs, options) {
       refs[refPath] = found
       if (is.object(item)) item[property] = refs[refPath]
       if (is.array(item)) {
-        const index = item.findIndex(i => i === property)
+        const index = item.findIndex((i) => i === property)
         item[index] = refs[refPath]
       }
     } else {
