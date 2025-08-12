@@ -18,6 +18,9 @@
     "lint:write": "biome check --write"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "author": "Sanity.io <hello@sanity.io>",
   "devDependencies": {
     "@biomejs/biome": "^2.1.4",
