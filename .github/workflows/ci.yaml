@@ -27,6 +27,11 @@ jobs:
       - run: npm run lint
 
   test:
+    permissions:
+      # Required to checkout the code
+      contents: read
+      # Required to put a comment into the pull-request
+      pull-requests: write
     name: Test
     runs-on: ${{ matrix.os }}
     strategy:
