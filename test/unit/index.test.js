@@ -1,5 +1,6 @@
 import {readFile} from 'node:fs/promises'
 import {join} from 'node:path'
+import schemas from '@sanity/blueprints-jsonschemas'
 import Ajv from 'ajv/dist/2020.js'
 import tap from 'tap'
 import blueprintParserValidator from '../../src/index.js'
@@ -94,8 +95,7 @@ tap.test('Reference resolution', async (t) => {
 })
 
 tap.test('2024-10-01', async (t) => {
-  const jsonSchema20241001File = join(cwd, 'schemas', '2024-10-01', 'blueprint.schema.json')
-  const jsonSchema20241001 = JSON.parse(await readFile(jsonSchema20241001File))
+  const jsonSchema20241001 = schemas['2024-10-01'].sanity.blueprint
 
   const basic = Object.entries(mocks.basic)
   const basicErrors = Object.entries(mocks.basicErrors)
