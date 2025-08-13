@@ -46,4 +46,4 @@ jobs:
       - uses: vebr/jest-lcov-reporter@v0.2.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: .tap/coverage/report/lcov.info
+          lcov-file: .tap/report/lcov.info
