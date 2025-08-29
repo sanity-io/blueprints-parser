@@ -1,6 +1,6 @@
 {
   "name": "@sanity/blueprints-parser",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A parser and validator for Sanity Blueprint documents.",
   "keywords": [
     "sanity",
