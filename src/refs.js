@@ -1,10 +1,20 @@
 import is from './is.js'
 export default {find, resolve}
 
-function find(rawBlueprint, options) {
+/**
+ * @param {import('.').Blueprint} validatedBlueprint
+ * @param {import('.').ParserOptions} options
+ * @returns {Array<import('.').Reference>}
+ */
+function find(validatedBlueprint, options) {
   const {debug} = options
+  /** @type {Array<import('.').Reference>} */
   const foundRefs = []
 
+  /**
+   * @param {*} item
+   * @param {string} path
+   */
   function walk(item, path) {
     if (is.object(item)) {
       for (const [name, value] of Object.entries(item)) {
@@ -26,9 +36,9 @@ function find(rawBlueprint, options) {
   const properties = ['resources', 'parameters', 'outputs']
   for (const property of properties) {
     // Run over the list
-    if (rawBlueprint[property]?.length) {
+    if (validatedBlueprint[property]?.length) {
       // Inspect each property, or (recursively) walk if it's an object
-      for (const item of rawBlueprint[property]) {
+      for (const item of validatedBlueprint[property]) {
         const top = `${property}.${item.name}`
         walk(item, top)
       }
@@ -43,7 +53,17 @@ function find(rawBlueprint, options) {
   return foundRefs
 }
 
-function resolve(rawBlueprint, foundRefs, options) {
+/**
+ * @param {import('.').Blueprint} blueprint
+ * @param {Array<import('.').Reference>} foundRefs
+ * @param {import('.').ParserOptions} options
+ * @returns {{
+ *   resolvedBlueprint: import('.').Blueprint
+ *   unresolvedRefs: Array<import('.').Reference> | undefined
+ *   refErrors: Array<import('.').ReferenceError>
+ * }}
+ */
+function resolve(blueprint, foundRefs, options) {
   const {parameters = {}} = options
   const refs = {}
   const unresolvedRefs = []
@@ -82,7 +102,7 @@ function resolve(rawBlueprint, foundRefs, options) {
     const found = parts.reduce((obj, i) => {
       if (obj?.[i]) return obj[i]
       if (is.array(obj)) return obj.find(({name}) => name === i)
-    }, rawBlueprint)
+    }, blueprint)
     if (is.scalar(found)) {
       refs[refPath] = found
       if (is.object(item)) item[property] = refs[refPath]
@@ -96,7 +116,7 @@ function resolve(rawBlueprint, foundRefs, options) {
   }
 
   return {
-    resolvedBlueprint: rawBlueprint,
+    resolvedBlueprint: blueprint,
     unresolvedRefs: unresolvedRefs.length ? unresolvedRefs : undefined,
     refErrors,
   }

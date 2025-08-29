@@ -1,57 +1,65 @@
-import {firstVersion} from './constants.js'
 import is from './is.js'
 import references from './refs.js'
 import validate from './validate.js'
 
+/**
+ * Parses and validates the given input into a Blueprint object.
+ * @param {import('./index.js').BlueprintInput} input
+ * @param {import('./index.js').ParserOptions} options
+ * @returns {import('./index.js').BlueprintOutput}
+ */
 export default function blueprintParserValidator(input, options = {}) {
   try {
-    const {rawBlueprint, parseErrors} = parse(input)
-    if (parseErrors?.length) {
+    const parsedOutput = parse(input)
+    if (parsedOutput.ok === false) {
       return {
-        blueprint: rawBlueprint || input,
-        errors: parseErrors,
+        result: 'parse_errors',
+        errors: parsedOutput.parseErrors,
       }
     }
 
-    const version = rawBlueprint.blueprintVersion || firstVersion
+    const parsedBlueprint = parsedOutput.rawBlueprint
 
-    // Aggregate basic structural, spec violation, or input errors
-    const initialErrors = []
-      .concat(
-        validate.version(version),
-        validate.resources(rawBlueprint.resources),
-        validate.values(rawBlueprint.values),
-        validate.parameters(rawBlueprint.parameters),
-        validate.outputs(rawBlueprint.outputs),
-        validate.metadata(rawBlueprint.metadata),
-        validate.else(rawBlueprint),
-        validate.passedParameters(options),
-      )
-      .filter(Boolean)
+    const validationResult = validate(parsedBlueprint, options)
 
-    if (initialErrors.length) {
+    if (validationResult.ok === false) {
       return {
-        blueprint: rawBlueprint,
-        errors: initialErrors,
+        result: 'validation_errors',
+        errors: validationResult.errors,
       }
     }
 
-    const foundRefs = references.find(rawBlueprint, options)
+    const validatedBlueprint = validationResult.blueprint
+
+    const foundRefs = references.find(validatedBlueprint, options)
     if (!foundRefs.length) {
       return {
-        blueprint: rawBlueprint,
+        result: 'valid',
+        blueprint: validatedBlueprint,
       }
     }
 
     const {resolvedBlueprint, unresolvedRefs, refErrors} = references.resolve(
-      rawBlueprint,
+      validatedBlueprint,
       foundRefs,
       options,
     )
 
-    const output = {blueprint: resolvedBlueprint}
+    /** @type {import('.').BlueprintOutput} */
+    let output
+    if (refErrors.length) {
+      output = {
+        result: 'reference_errors',
+        blueprint: resolvedBlueprint,
+        errors: refErrors,
+      }
+    } else {
+      output = {
+        result: 'valid',
+        blueprint: resolvedBlueprint,
+      }
+    }
     if (unresolvedRefs?.length) output.unresolvedRefs = unresolvedRefs
-    if (refErrors.length) output.errors = refErrors
 
     return output
 
@@ -62,12 +70,21 @@ export default function blueprintParserValidator(input, options = {}) {
   }
 }
 
+/**
+ * Parse the raw input into a Blueprint object.
+ * @param {import('.').BlueprintInput} input
+ * @returns {import('.').ParserOuput}
+ */
 function parse(input) {
   if (is.string(input) || input instanceof Buffer) {
     try {
-      return {rawBlueprint: JSON.parse(input)}
+      const rawBlueprint = JSON.parse(input.toString())
+      if (is.object(rawBlueprint)) {
+        return {ok: true, rawBlueprint}
+      }
     } catch (error) {
       return {
+        ok: false,
         parseErrors: [
           {
             message: 'Invalid Blueprint JSON',
@@ -78,9 +95,11 @@ function parse(input) {
       }
     }
   } else if (is.object(input)) {
-    return {rawBlueprint: structuredClone(input)}
+    const rawBlueprint = /** @type {Record<string, unknown>} */ (input)
+    return {ok: true, rawBlueprint: structuredClone(rawBlueprint)}
   }
   return {
+    ok: false,
     parseErrors: [
       {
         message: 'Invalid input',

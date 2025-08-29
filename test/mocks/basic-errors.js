@@ -1,5 +1,8 @@
 const ignoreJSONSchemaTest = {metadata: {ignore: true}}
 
+/**
+ * @type {Record<string, any>}
+ */
 export default {
   // blueprintVersion
   blueprintVersionType: {

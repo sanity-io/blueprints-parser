@@ -1,0 +1,8 @@
+{
+  "name": "blueprints-parser-integration-tests",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@sanity/blueprints-parser": "file:../.."
+  }
+}
