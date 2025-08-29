@@ -47,6 +47,7 @@ jobs:
           cache: npm
           node-version: ${{ matrix.node-version }}
       - run: npm ci
+      - run: cd test/integration; npm install
       - run: npm test
       - uses: vebr/jest-lcov-reporter@v0.2.1
         with:
