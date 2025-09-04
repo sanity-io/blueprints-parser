@@ -39,7 +39,7 @@ jobs:
       matrix:
         # Run the testing suite on each major OS with the latest LTS release of Node.js
         os: [macos-latest, ubuntu-latest, windows-latest]
-        node-version: ["lts/*"]
+        node-version: [20, 22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
