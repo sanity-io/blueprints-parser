@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/sanity-io/blueprints-parser/compare/v0.2.0...v0.2.1) (2025-09-04)
+
+
+### Bug Fixes
+
+* Support node 20.19 ([#7](https://github.com/sanity-io/blueprints-parser/issues/7)) ([d85c24e](https://github.com/sanity-io/blueprints-parser/commit/d85c24e172e5e898cc6689f003c11efb0f2afde0))
+
 ## [0.2.0](https://github.com/sanity-io/blueprints-parser/compare/v0.1.0...v0.2.0) (2025-08-29)
 
 
