@@ -20,18 +20,18 @@
   "scripts": {
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "npx tap run --include=test/unit/**/* --coverage-report=text --coverage-report=lcov --no-browser",
-    "test:integration": "node --test test/integration/**/*.test.js",
+    "test:integration": "cd test/integration && npm test",
     "lint": "biome ci",
     "lint:write": "biome check --write"
   },
   "license": "MIT",
   "engines": {
-    "node": ">=22"
+    "node": ">=20.19 <22 || >=22.12"
   },
   "author": "Sanity.io <hello@sanity.io>",
   "devDependencies": {
     "@biomejs/biome": "^2.1.4",
-    "@sanity/blueprints-jsonschemas": "^0.1.0",
+    "@sanity/blueprints-jsonschemas": "^0.1.1",
     "ajv": "^8.17.1",
     "tap": "^21.1.0"
   },
