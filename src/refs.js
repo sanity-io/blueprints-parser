@@ -19,14 +19,14 @@ function find(validatedBlueprint, options) {
     if (is.object(item)) {
       for (const [name, value] of Object.entries(item)) {
         const cur = `${path}.${name}`
-        if (is.ref(value)) foundRefs.push({path: cur, property: name, ref: value, item})
+        if (is.ref(value)) foundRefs.push({path: cur, ref: value, container: item, property: name})
         else if (is.object(value) || is.array(value)) walk(value, cur)
       }
     }
     if (is.array(item)) {
       item.forEach((value, index) => {
         const cur = `${path}[${index}]`
-        if (is.ref(value)) foundRefs.push({path: cur, property: value, ref: value, item, index})
+        if (is.ref(value)) foundRefs.push({path: cur, ref: value, container: item, property: index})
         else if (is.object(value)) walk(value, cur)
       })
     }
@@ -59,59 +59,68 @@ function find(validatedBlueprint, options) {
  * @param {import('.').ParserOptions} options
  * @returns {{
  *   resolvedBlueprint: import('.').Blueprint
- *   unresolvedRefs: Array<import('.').Reference> | undefined
+ *   unresolvedRefs: Array<import('.').UnresolvedReference> | undefined
  *   refErrors: Array<import('.').ReferenceError>
  * }}
  */
 function resolve(blueprint, foundRefs, options) {
   const {parameters = {}} = options
+
+  /** @type {Record<string, import('.').Reference>} */
   const refs = {}
+  /** @type {Array<import('.').UnresolvedReference>} */
   const unresolvedRefs = []
   const refErrors = []
   for (const foundRef of foundRefs) {
-    const {property, ref, item} = foundRef
-    const refPath = ref.replace(/^\$\./, '')
+    const {ref} = foundRef
     // Early return from an already found reference
-    if (refs[refPath]) {
-      item[property] = refs[refPath]
+    if (refs[ref]) {
+      foundRef.container[foundRef.property] = refs[ref].container[refs[ref].property]
       continue
     }
 
-    // Parameters are special, (try to) find them in options.parameters passed by the caller
-    const parts = refPath.split('.')
-    const param = parts[1]
-    if (['parameters', 'params'].includes(parts[0])) {
-      const found = parameters[param]
-      if (is.scalar(found)) {
-        refs[refPath] = found
-        if (is.object(item)) item[property] = refs[refPath]
-        if (is.array(item)) {
-          const index = item.findIndex((i) => i === property)
-          item[index] = refs[refPath]
-        }
+    refs[ref] = foundRef
+
+    const parts = ref.split('.')
+    console.log('parts', parts)
+    const refType = parts[1]
+    const refName = parts[2]
+    if (refType === 'parameters' || refType === 'params') {
+      const param = parameters[refName]
+      if (is.scalar(param)) {
+        foundRef.container[foundRef.property] = param
       } else {
         refErrors.push({
-          message: `Reference error '${ref}': '${param}' not found in passed parameters`,
+          message: `Reference error '${ref}': '${refName}' not found in passed parameters`,
           type: 'missing_parameter',
         })
       }
-      continue
-    }
-
-    // Will prob need to refactor the following to get a bit more readable, and introduce more subtle behavior
-    const found = parts.reduce((obj, i) => {
-      if (obj?.[i]) return obj[i]
-      if (is.array(obj)) return obj.find(({name}) => name === i)
-    }, blueprint)
-    if (is.scalar(found)) {
-      refs[refPath] = found
-      if (is.object(item)) item[property] = refs[refPath]
-      if (is.array(item)) {
-        const index = item.findIndex((i) => i === property)
-        item[index] = refs[refPath]
+    } else if (refType === 'values') {
+      console.log('values', ref, foundRef)
+      const value = blueprint.values?.[refName]
+      if (is.scalar(value)) {
+        foundRef.container[foundRef.property] = value
+      } else {
+        refErrors.push({
+          message: `Reference error '${ref}': '${refName}' not found in blueprint values`,
+          type: 'missing_value',
+        })
       }
+    } else if (refType === 'metadata' || refType === 'outputs') {
+      refErrors.push({
+        message: `Reference error '${ref}': invalid reference to ${refType}`,
+        type: 'invalid_reference',
+      })
+    } else if (refType === 'blueprintVersion') {
+      foundRef.container[foundRef.property] = blueprint.blueprintVersion
+    } else if (refType === 'resources') {
+      // all resources references must be resolved during deployment
+      unresolvedRefs.push({path: foundRef.path, ref: foundRef.ref})
     } else {
-      unresolvedRefs.push(foundRef)
+      refErrors.push({
+        message: `Reference error '${ref}': invalid reference type ${refType}`,
+        type: 'invalid_reference',
+      })
     }
   }
 

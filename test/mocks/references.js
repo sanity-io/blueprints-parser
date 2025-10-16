@@ -84,6 +84,28 @@ export default {
     unresolved: undefined,
   },
 
+  blueprintVersionReference: {
+    input: {
+      blueprintVersion: '2025-01-01',
+      outputs: [
+        {
+          name: 'version',
+          value: '$.blueprintVersion',
+        },
+      ],
+    },
+
+    expected: {
+      blueprintVersion: '2025-01-01',
+      outputs: [
+        {
+          name: 'version',
+          value: '2025-01-01',
+        },
+      ],
+    },
+  },
+
   deepyNestedObjectReference: {
     input: {
       resources: [
@@ -105,7 +127,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: 1000},
+          config: {memory: '$.resources.another-function.config.env.memory'},
         },
         {
           name: 'another-function',
@@ -115,7 +137,12 @@ export default {
       ],
     },
 
-    unresolved: undefined,
+    unresolved: [
+      {
+        path: 'resources.a-function.config.memory',
+        ref: '$.resources.another-function.config.env.memory',
+      },
+    ],
   },
 
   arrayReference: {
@@ -142,12 +169,17 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          projects: ['project-1', 'a-project', 'project-2'],
+          projects: ['project-1', '$.resources.a-project.name', 'project-2'],
         },
       ],
     },
 
-    unresolved: undefined,
+    unresolved: [
+      {
+        path: 'resources.a-function.projects[1]',
+        ref: '$.resources.a-project.name',
+      },
+    ],
   },
 
   // This is so weird please don't do this omg
@@ -184,7 +216,7 @@ export default {
           config: {
             settings: [
               {
-                projects: ['project-1', 'project-2', 'a-project'],
+                projects: ['project-1', 'project-2', '$.resources.a-project.name'],
               },
             ],
           },
@@ -192,7 +224,12 @@ export default {
       ],
     },
 
-    unresolved: undefined,
+    unresolved: [
+      {
+        path: 'resources.a-function.config.settings[0].projects[2]',
+        ref: '$.resources.a-project.name',
+      },
+    ],
   },
 
   arrayReferenceToParams: {
@@ -272,13 +309,18 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.values.memory'},
+          config: {memory: 1000},
+        },
+        {
+          name: 'another-function',
+          type: 'cloud-function',
+          config: {memory: '$.resources.a-function.config.memory'},
         },
       ],
       outputs: [
         {
           name: 'configured-memory',
-          value: '$.values.memory',
+          value: '$.resources.another-function.config.memory',
         },
       ],
     },
@@ -288,29 +330,30 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.values.memory'},
+          config: {memory: 1000},
+        },
+        {
+          name: 'another-function',
+          type: 'cloud-function',
+          config: {memory: '$.resources.a-function.config.memory'},
         },
       ],
       outputs: [
         {
           name: 'configured-memory',
-          value: '$.values.memory',
+          value: '$.resources.another-function.config.memory',
         },
       ],
     },
 
     unresolved: [
       {
-        path: 'resources.a-function.config.memory',
-        property: 'memory',
-        ref: '$.values.memory',
-        item: {memory: '$.values.memory'},
+        path: 'resources.another-function.config.memory',
+        ref: '$.resources.a-function.config.memory',
       },
       {
         path: 'outputs.configured-memory.value',
-        property: 'value',
-        ref: '$.values.memory',
-        item: {name: 'configured-memory', value: '$.values.memory'},
+        ref: '$.resources.another-function.config.memory',
       },
     ],
   },
@@ -339,10 +382,7 @@ export default {
     unresolved: [
       {
         path: 'resources.a-function.projects[2]',
-        property: '$.resources.a-project.name',
         ref: '$.resources.a-project.name',
-        item: ['project-1', 'project-2', '$.resources.a-project.name', 'project-4'],
-        index: 2,
       },
     ],
   },
@@ -383,10 +423,7 @@ export default {
     unresolved: [
       {
         path: 'resources.a-function.config.settings[0].projects[0]',
-        property: '$.resources.a-project.name',
         ref: '$.resources.a-project.name',
-        item: ['$.resources.a-project.name', 'project-2', 'project-3'],
-        index: 0,
       },
     ],
   },
