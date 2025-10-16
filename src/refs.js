@@ -82,7 +82,6 @@ function resolve(blueprint, foundRefs, options) {
     refs[ref] = foundRef
 
     const parts = ref.split('.')
-    console.log('parts', parts)
     const refType = parts[1]
     const refName = parts[2]
     if (refType === 'parameters' || refType === 'params') {
@@ -96,7 +95,6 @@ function resolve(blueprint, foundRefs, options) {
         })
       }
     } else if (refType === 'values') {
-      console.log('values', ref, foundRef)
       const value = blueprint.values?.[refName]
       if (is.scalar(value)) {
         foundRef.container[foundRef.property] = value
