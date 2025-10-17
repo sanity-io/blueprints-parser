@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://github.com/sanity-io/blueprints-parser/compare/v0.2.1...v0.3.0) (2025-10-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* Make references work more consistently ([#9](https://github.com/sanity-io/blueprints-parser/issues/9))
+
+### Features
+
+* Make references work more consistently ([#9](https://github.com/sanity-io/blueprints-parser/issues/9)) ([c2e7944](https://github.com/sanity-io/blueprints-parser/commit/c2e7944c88361fd6547db9b8932c4cab261c3b41))
+
+
+### Bug Fixes
+
+* release 0.3.0 ([#11](https://github.com/sanity-io/blueprints-parser/issues/11)) ([e7971b1](https://github.com/sanity-io/blueprints-parser/commit/e7971b1c595b13cc83f754e5f39332e0cf528ba5))
+
 ## [0.2.1](https://github.com/sanity-io/blueprints-parser/compare/v0.2.0...v0.2.1) (2025-09-04)
 
 
