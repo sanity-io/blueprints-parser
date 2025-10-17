@@ -1,8 +1,10 @@
+export type Scalar = string | number
+
 export type BlueprintInput = string | Buffer | object
 
 export type ParserOptions = {
   debug?: boolean
-  parameters?: Record<string, string | number | boolean>
+  parameters?: Record<string, Scalar>
 }
 
 export type Resource = {
@@ -32,7 +34,7 @@ export type Output = {
 export type Blueprint = {
   blueprintVersion?: string
   resources?: Array<Resource>
-  values?: Record<string, string | number>
+  values?: Record<string, Scalar>
   parameters?: Array<Parameter>
   outputs?: Array<Output>
   metadata?: Record<string, unknown>
@@ -64,11 +66,19 @@ export type ValidationError = {
   message: string
 }
 
-export type Reference = {
+export type UnresolvedReference = {
+  /** The location where the reference was found */
   path: string
-  property: string
+  /** The content of the reference (e.g. $.resources.project-1.id) */
   ref: string
-} & ({item: Record<string, unknown>} | {item: Array<unknown>; index: number})
+}
+
+export type Reference = UnresolvedReference & {
+  /** The object or array containing the reference */
+  container: object | Array
+  /** The key or index of the reference in the container */
+  property: string | number
+}
 
 export type ReferenceError = {
   type: string
@@ -81,12 +91,12 @@ export type BlueprintOutput =
   | {
       result: 'valid'
       blueprint: Blueprint
-      unresolvedRefs?: Array<Reference>
+      unresolvedRefs?: Array<UnresolvedReference>
     }
   | {
       result: 'reference_errors'
       blueprint: Blueprint
-      unresolvedRefs?: Array<Reference>
+      unresolvedRefs?: Array<UnresolvedReference>
       errors: Array<ReferenceError>
     }
   | {

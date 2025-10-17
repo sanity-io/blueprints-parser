@@ -34,6 +34,69 @@ export default {
     },
   },
 
+  unresolvedValueReference: {
+    input: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {memory: '$.values.memory'},
+        },
+      ],
+    },
+    expected: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {memory: '$.values.memory'},
+        },
+      ],
+    },
+  },
+
+  invalidReferenceTypeMetadata: {
+    input: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {memory: '$.metadata.memory'},
+        },
+      ],
+    },
+    expected: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {memory: '$.metadata.memory'},
+        },
+      ],
+    },
+  },
+
+  invalidReferenceType: {
+    input: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {memory: '$.invalid.memory'},
+        },
+      ],
+    },
+    expected: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {memory: '$.invalid.memory'},
+        },
+      ],
+    },
+  },
+
   unresolvedParameterReferenceAndRegularReference: {
     input: {
       resources: [
@@ -42,7 +105,14 @@ export default {
           type: 'cloud-function',
           config: {
             memory: '$.parameters.memory',
-            disk: '$.values.disk',
+            disk: '20G',
+          },
+        },
+        {
+          name: 'another-function',
+          type: 'cloud-function',
+          config: {
+            disk: '$.resources.a-function.config.disk',
           },
         },
       ],
@@ -61,7 +131,14 @@ export default {
           type: 'cloud-function',
           config: {
             memory: '$.parameters.memory',
-            disk: '$.values.disk',
+            disk: '20G',
+          },
+        },
+        {
+          name: 'another-function',
+          type: 'cloud-function',
+          config: {
+            disk: '$.resources.a-function.config.disk',
           },
         },
       ],
@@ -75,13 +152,8 @@ export default {
     },
     unresolved: [
       {
-        path: 'resources.a-function.config.disk',
-        property: 'disk',
-        ref: '$.values.disk',
-        item: {
-          memory: '$.parameters.memory',
-          disk: '$.values.disk',
-        },
+        path: 'resources.another-function.config.disk',
+        ref: '$.resources.a-function.config.disk',
       },
     ],
   },

@@ -111,7 +111,7 @@ tap.test('Reference resolution', async (t) => {
       debug: true,
       parameters,
     })
-    t.same(output.result, 'valid')
+    t.same(output.result, 'valid', `${name}: returned expected result`)
     if (output.result === 'valid') {
       const {blueprint, unresolvedRefs} = output
       t.same(blueprint, expected, `${name}: returned expected blueprint`)
