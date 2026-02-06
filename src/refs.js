@@ -73,17 +73,23 @@ function resolve(blueprint, foundRefs, options) {
   const refErrors = []
   for (const foundRef of foundRefs) {
     const {ref} = foundRef
+    const parts = ref.split('.')
+    const refType = parts[1]
+    const refName = parts[2]
+    
     // Early return from an already found reference
     if (refs[ref]) {
-      foundRef.container[foundRef.property] = refs[ref].container[refs[ref].property]
+      if (refType === 'resources') {
+        // all resources references must be resolved during deployment
+        unresolvedRefs.push({path: foundRef.path, ref: foundRef.ref})
+      } else {
+        foundRef.container[foundRef.property] = refs[ref].container[refs[ref].property]
+      }
       continue
     }
 
     refs[ref] = foundRef
 
-    const parts = ref.split('.')
-    const refType = parts[1]
-    const refName = parts[2]
     if (refType === 'parameters' || refType === 'params') {
       const param = parameters[refName]
       if (is.scalar(param)) {
