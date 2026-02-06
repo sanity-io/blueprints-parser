@@ -30,10 +30,10 @@
   },
   "author": "Sanity.io <hello@sanity.io>",
   "devDependencies": {
-    "@biomejs/biome": "^2.1.4",
+    "@biomejs/biome": "^2.3.14",
     "@sanity/blueprints-jsonschemas": "^0.1.1",
     "ajv": "^8.17.1",
-    "tap": "^21.1.0"
+    "tap": "^21.5.1"
   },
   "publishConfig": {
     "access": "public"
