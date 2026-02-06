@@ -71,7 +71,7 @@ function resources(resources) {
         message: `Resources must be an object, found: ${JSON.stringify(resource)}`,
         type: 'invalid_type',
       })
-      return errors
+      return
     }
 
     const {name, type} = resource
@@ -187,7 +187,7 @@ function parameters(parameters) {
           message: `Parameters must be an object, found: ${JSON.stringify(param)}`,
           type: 'invalid_type',
         })
-        return errors
+        return
       }
 
       const {name, type} = param
@@ -265,7 +265,7 @@ function outputs(outputs) {
         message: `Outputs must be an object, found: ${JSON.stringify(output)}`,
         type: 'invalid_type',
       })
-      return errors
+      return
     }
 
     const {name, value} = output
