@@ -374,6 +374,10 @@ export default {
     input: {
       resources: [
         {
+          name: 'a-project',
+          type: 'cloud-project',
+        },
+        {
           name: 'a-function',
           type: 'cloud-function',
           projects: ['project-1', 'project-2', '$.resources.a-project.name', 'project-4'],
@@ -383,6 +387,10 @@ export default {
 
     expected: {
       resources: [
+        {
+          name: 'a-project',
+          type: 'cloud-project',
+        },
         {
           name: 'a-function',
           type: 'cloud-function',
@@ -403,6 +411,10 @@ export default {
     input: {
       resources: [
         {
+          name: 'a-project',
+          type: 'cloud-project',
+        },
+        {
           name: 'a-function',
           type: 'cloud-function',
           config: {
@@ -418,6 +430,10 @@ export default {
 
     expected: {
       resources: [
+        {
+          name: 'a-project',
+          type: 'cloud-project',
+        },
         {
           name: 'a-function',
           type: 'cloud-function',
