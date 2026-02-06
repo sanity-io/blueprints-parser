@@ -319,7 +319,11 @@ export default {
       ],
       outputs: [
         {
-          name: 'configured-memory',
+          name: 'configured-memory-1',
+          value: '$.resources.another-function.config.memory',
+        },
+        {
+          name: 'configured-memory-2',
           value: '$.resources.another-function.config.memory',
         },
       ],
@@ -340,7 +344,11 @@ export default {
       ],
       outputs: [
         {
-          name: 'configured-memory',
+          name: 'configured-memory-1',
+          value: '$.resources.another-function.config.memory',
+        },
+        {
+          name: 'configured-memory-2',
           value: '$.resources.another-function.config.memory',
         },
       ],
@@ -352,7 +360,11 @@ export default {
         ref: '$.resources.a-function.config.memory',
       },
       {
-        path: 'outputs.configured-memory.value',
+        path: 'outputs.configured-memory-1.value',
+        ref: '$.resources.another-function.config.memory',
+      },
+      {
+        path: 'outputs.configured-memory-2.value',
         ref: '$.resources.another-function.config.memory',
       },
     ],
