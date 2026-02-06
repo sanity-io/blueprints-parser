@@ -117,6 +117,8 @@ tap.test('Reference resolution', async (t) => {
       t.same(blueprint, expected, `${name}: returned expected blueprint`)
       t.same(unresolvedRefs, unresolved, `${name}: returned expected unresolved references`)
       t.notOk('errors' in output, `${name}: found no issues`)
+    } else {
+      t.notOk(output.errors, `${name}: ${JSON.stringify(output.errors)}`)
     }
   }
 

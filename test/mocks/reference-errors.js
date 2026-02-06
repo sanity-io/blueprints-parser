@@ -1,5 +1,5 @@
 export default {
-  unresolvedParameterReference: {
+  missingParameterReference: {
     input: {
       resources: [
         {
@@ -34,7 +34,28 @@ export default {
     },
   },
 
-  unresolvedValueReference: {
+  missingResourceReference: {
+    input: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {memory: '$.resources.another-function.memory'},
+        },
+      ],
+    },
+    expected: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {memory: '$.resources.another-function.memory'},
+        },
+      ],
+    },
+  },
+
+  missingValueReference: {
     input: {
       resources: [
         {

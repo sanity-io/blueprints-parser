@@ -112,8 +112,16 @@ function resolve(blueprint, foundRefs, options) {
     } else if (refType === 'blueprintVersion') {
       foundRef.container[foundRef.property] = blueprint.blueprintVersion
     } else if (refType === 'resources') {
-      // all resources references must be resolved during deployment
-      unresolvedRefs.push({path: foundRef.path, ref: foundRef.ref})
+      // check that the resource is in the list
+      if (blueprint.resources?.some((resource) => resource.name === refName)) {
+        // all resources references must be resolved during deployment
+        unresolvedRefs.push({path: foundRef.path, ref: foundRef.ref})
+      } else {
+        refErrors.push({
+          message: `Reference error '${ref}': '${refName}' not found in blueprint resources`,
+          type: 'missing_resource',
+        })
+      }
     } else {
       refErrors.push({
         message: `Reference error '${ref}': invalid reference type ${refType}`,
