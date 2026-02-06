@@ -76,7 +76,7 @@ function resolve(blueprint, foundRefs, options) {
     const parts = ref.split('.')
     const refType = parts[1]
     const refName = parts[2]
-    
+
     // Early return from an already found reference
     if (refs[ref]) {
       if (refType === 'resources') {
