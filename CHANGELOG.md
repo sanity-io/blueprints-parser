@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.1](https://github.com/sanity-io/blueprints-parser/compare/v0.3.0...v0.3.1) (2026-02-06)
+
+
+### Bug Fixes
+
+* Handle duplicate unresolved references ([#12](https://github.com/sanity-io/blueprints-parser/issues/12)) ([910dafc](https://github.com/sanity-io/blueprints-parser/commit/910dafc9493d4e622de0c452799e6b0a861854fd))
+* Return reference error if resource is missing ([#14](https://github.com/sanity-io/blueprints-parser/issues/14)) ([7a15103](https://github.com/sanity-io/blueprints-parser/commit/7a1510333998ffe0d216f1ca08d355811d34d532))
+* Update dependencies ([#13](https://github.com/sanity-io/blueprints-parser/issues/13)) ([ad01057](https://github.com/sanity-io/blueprints-parser/commit/ad010574f2a6a2904303294efee0322a5e344283))
+
 ## [0.3.0](https://github.com/sanity-io/blueprints-parser/compare/v0.2.1...v0.3.0) (2025-10-17)
 
 
