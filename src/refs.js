@@ -64,7 +64,7 @@ function find(validatedBlueprint, options) {
  * }}
  */
 function resolve(blueprint, foundRefs, options) {
-  const {parameters = {}} = options
+  const {parameters = {}, invalidReferenceTypes} = options
 
   /** @type {Record<string, import('.').Reference>} */
   const refs = {}
@@ -119,9 +119,18 @@ function resolve(blueprint, foundRefs, options) {
       foundRef.container[foundRef.property] = blueprint.blueprintVersion
     } else if (refType === 'resources') {
       // check that the resource is in the list
-      if (blueprint.resources?.some((resource) => resource.name === refName)) {
-        // all resources references must be resolved during deployment
-        unresolvedRefs.push({path: foundRef.path, ref: foundRef.ref})
+      const found = blueprint.resources?.find((resource) => resource.name === refName)
+      if (found) {
+        // check if we allow references to the found resource's type
+        if (invalidReferenceTypes?.includes(found.type)) {
+          refErrors.push({
+            message: `Reference error '${ref}': '${refName}' type '${found.type}' cannot be referenced`,
+            type: 'invalid_reference',
+          })
+        } else {
+          // all resources references must be resolved during deployment
+          unresolvedRefs.push({path: foundRef.path, ref: foundRef.ref})
+        }
       } else {
         refErrors.push({
           message: `Reference error '${ref}': '${refName}' not found in blueprint resources`,

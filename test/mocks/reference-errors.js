@@ -5,7 +5,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.parameters.memory'},
+          config: { memory: '$.parameters.memory' },
         },
       ],
       parameters: [
@@ -21,7 +21,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.parameters.memory'},
+          config: { memory: '$.parameters.memory' },
         },
       ],
       parameters: [
@@ -31,6 +31,10 @@ export default {
           input: 'MEM',
         },
       ],
+    },
+    error: {
+      type: 'missing_parameter',
+      message: "Reference error '$.parameters.memory': 'memory' not found in passed parameters",
     },
   },
 
@@ -40,7 +44,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.resources.another-function.memory'},
+          config: { memory: '$.resources.another-function.memory' },
         },
       ],
     },
@@ -49,9 +53,13 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.resources.another-function.memory'},
+          config: { memory: '$.resources.another-function.memory' },
         },
       ],
+    },
+    error: {
+      type: 'missing_resource',
+      message: "Reference error '$.resources.another-function.memory': 'another-function' not found in blueprint resources",
     },
   },
 
@@ -61,7 +69,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.values.memory'},
+          config: { memory: '$.values.memory' },
         },
       ],
     },
@@ -70,9 +78,13 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.values.memory'},
+          config: { memory: '$.values.memory' },
         },
       ],
+    },
+    error: {
+      type: 'missing_value',
+      message: "Reference error '$.values.memory': 'memory' not found in blueprint values",
     },
   },
 
@@ -82,7 +94,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.metadata.memory'},
+          config: { memory: '$.metadata.memory' },
         },
       ],
     },
@@ -91,9 +103,13 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.metadata.memory'},
+          config: { memory: '$.metadata.memory' },
         },
       ],
+    },
+    error: {
+      type: 'invalid_reference',
+      message: "Reference error '$.metadata.memory': invalid reference to metadata",
     },
   },
 
@@ -103,7 +119,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.invalid.memory'},
+          config: { memory: '$.invalid.memory' },
         },
       ],
     },
@@ -112,9 +128,51 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: {memory: '$.invalid.memory'},
+          config: { memory: '$.invalid.memory' },
         },
       ],
+    },
+    error: {
+      type: 'invalid_reference',
+      message: "Reference error '$.invalid.memory': invalid reference type invalid",
+    },
+  },
+
+  invalidReferenceResourceType: {
+    options: {
+      invalidReferenceTypes: ['cloud-function'],
+    },
+    input: {
+      resources: [
+        {
+          name: 'a-function-1',
+          type: 'cloud-function',
+          config: { memory: 1000 },
+        },
+        {
+          name: 'a-function-2',
+          type: 'cloud-function',
+          config: { memory: '$.resources.a-function-1.config.memory' },
+        },
+      ],
+    },
+    expected: {
+      resources: [
+        {
+          name: 'a-function-1',
+          type: 'cloud-function',
+          config: { memory: 1000 },
+        },
+        {
+          name: 'a-function-2',
+          type: 'cloud-function',
+          config: { memory: '$.resources.a-function-1.config.memory' },
+        },
+      ],
+    },
+    error: {
+      type: 'invalid_reference',
+      message: "Reference error '$.resources.a-function-1.config.memory': 'a-function-1' type 'cloud-function' cannot be referenced",
     },
   },
 
@@ -177,5 +235,9 @@ export default {
         ref: '$.resources.a-function.config.disk',
       },
     ],
+    error: {
+      type: 'missing_parameter',
+      message: "Reference error '$.parameters.memory': 'memory' not found in passed parameters",
+    },
   },
 }
