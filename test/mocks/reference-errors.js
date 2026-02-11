@@ -32,6 +32,10 @@ export default {
         },
       ],
     },
+    error: {
+      type: 'missing_parameter',
+      message: "Reference error '$.parameters.memory': 'memory' not found in passed parameters",
+    },
   },
 
   missingResourceReference: {
@@ -52,6 +56,11 @@ export default {
           config: {memory: '$.resources.another-function.memory'},
         },
       ],
+    },
+    error: {
+      type: 'missing_resource',
+      message:
+        "Reference error '$.resources.another-function.memory': 'another-function' not found in blueprint resources",
     },
   },
 
@@ -74,6 +83,10 @@ export default {
         },
       ],
     },
+    error: {
+      type: 'missing_value',
+      message: "Reference error '$.values.memory': 'memory' not found in blueprint values",
+    },
   },
 
   invalidReferenceTypeMetadata: {
@@ -95,6 +108,10 @@ export default {
         },
       ],
     },
+    error: {
+      type: 'invalid_reference',
+      message: "Reference error '$.metadata.memory': invalid reference to metadata",
+    },
   },
 
   invalidReferenceType: {
@@ -115,6 +132,49 @@ export default {
           config: {memory: '$.invalid.memory'},
         },
       ],
+    },
+    error: {
+      type: 'invalid_reference',
+      message: "Reference error '$.invalid.memory': invalid reference type invalid",
+    },
+  },
+
+  invalidReferenceResourceType: {
+    options: {
+      invalidReferenceTypes: ['cloud-function'],
+    },
+    input: {
+      resources: [
+        {
+          name: 'a-function-1',
+          type: 'cloud-function',
+          config: {memory: 1000},
+        },
+        {
+          name: 'a-function-2',
+          type: 'cloud-function',
+          config: {memory: '$.resources.a-function-1.config.memory'},
+        },
+      ],
+    },
+    expected: {
+      resources: [
+        {
+          name: 'a-function-1',
+          type: 'cloud-function',
+          config: {memory: 1000},
+        },
+        {
+          name: 'a-function-2',
+          type: 'cloud-function',
+          config: {memory: '$.resources.a-function-1.config.memory'},
+        },
+      ],
+    },
+    error: {
+      type: 'invalid_reference',
+      message:
+        "Reference error '$.resources.a-function-1.config.memory': 'a-function-1' type 'cloud-function' cannot be referenced",
     },
   },
 
@@ -177,5 +237,9 @@ export default {
         ref: '$.resources.a-function.config.disk',
       },
     ],
+    error: {
+      type: 'missing_parameter',
+      message: "Reference error '$.parameters.memory': 'memory' not found in passed parameters",
+    },
   },
 }

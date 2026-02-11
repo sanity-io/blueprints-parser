@@ -102,7 +102,7 @@ tap.test('Basic input: errors', async (t) => {
 tap.test('Reference resolution', async (t) => {
   const references = Object.entries(mocks.references)
   const referenceErrors = Object.entries(mocks.referenceErrors)
-  const tests = references.length * 4 + referenceErrors.length * 4
+  const tests = references.length * 4 + referenceErrors.length * 5
   t.plan(tests)
 
   // Basic reference resolution
@@ -123,17 +123,26 @@ tap.test('Reference resolution', async (t) => {
   }
 
   // Basic reference errors
-  for (const [name, {input, expected, unresolved}] of referenceErrors) {
+  for (const [name, {options, input, expected, unresolved, error}] of referenceErrors) {
     const output = blueprintParserValidator(input, {
       debug: true,
       parameters: {},
+      ...options,
     })
     t.ok(output.result, 'result is true despite reference errors')
     if (output.result === 'reference_errors') {
       const {blueprint, unresolvedRefs, errors} = output
       t.same(blueprint, expected, `${name}: returned expected blueprint`)
       t.same(unresolvedRefs, unresolved, `${name}: returned expected unresolved references`)
-      t.ok(errors, `${name}: parser / validator found an error`)
+      t.ok(errors && errors.length > 0, `${name}: parser / validator found an error`)
+      if (error && errors && errors.length > 0) {
+        t.ok(
+          errors.some((err) => err.type === error.type && err.message === error.message),
+          JSON.stringify(errors),
+        )
+      } else {
+        t.ok(true) // makes planning easier
+      }
     }
   }
 })
