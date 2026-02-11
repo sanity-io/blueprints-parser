@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/sanity-io/blueprints-parser/compare/v0.3.1...v0.4.0) (2026-02-11)
+
+
+### Features
+
+* Ability to specify types that cannot be referenced ([#16](https://github.com/sanity-io/blueprints-parser/issues/16)) ([4984cff](https://github.com/sanity-io/blueprints-parser/commit/4984cff4e532e5b6fc6f3f244d5555b0ec707ac3))
+
 ## [0.3.1](https://github.com/sanity-io/blueprints-parser/compare/v0.3.0...v0.3.1) (2026-02-06)
 
 
