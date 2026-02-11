@@ -5,7 +5,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.parameters.memory' },
+          config: {memory: '$.parameters.memory'},
         },
       ],
       parameters: [
@@ -21,7 +21,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.parameters.memory' },
+          config: {memory: '$.parameters.memory'},
         },
       ],
       parameters: [
@@ -44,7 +44,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.resources.another-function.memory' },
+          config: {memory: '$.resources.another-function.memory'},
         },
       ],
     },
@@ -53,13 +53,14 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.resources.another-function.memory' },
+          config: {memory: '$.resources.another-function.memory'},
         },
       ],
     },
     error: {
       type: 'missing_resource',
-      message: "Reference error '$.resources.another-function.memory': 'another-function' not found in blueprint resources",
+      message:
+        "Reference error '$.resources.another-function.memory': 'another-function' not found in blueprint resources",
     },
   },
 
@@ -69,7 +70,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.values.memory' },
+          config: {memory: '$.values.memory'},
         },
       ],
     },
@@ -78,7 +79,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.values.memory' },
+          config: {memory: '$.values.memory'},
         },
       ],
     },
@@ -94,7 +95,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.metadata.memory' },
+          config: {memory: '$.metadata.memory'},
         },
       ],
     },
@@ -103,7 +104,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.metadata.memory' },
+          config: {memory: '$.metadata.memory'},
         },
       ],
     },
@@ -119,7 +120,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.invalid.memory' },
+          config: {memory: '$.invalid.memory'},
         },
       ],
     },
@@ -128,7 +129,7 @@ export default {
         {
           name: 'a-function',
           type: 'cloud-function',
-          config: { memory: '$.invalid.memory' },
+          config: {memory: '$.invalid.memory'},
         },
       ],
     },
@@ -147,12 +148,12 @@ export default {
         {
           name: 'a-function-1',
           type: 'cloud-function',
-          config: { memory: 1000 },
+          config: {memory: 1000},
         },
         {
           name: 'a-function-2',
           type: 'cloud-function',
-          config: { memory: '$.resources.a-function-1.config.memory' },
+          config: {memory: '$.resources.a-function-1.config.memory'},
         },
       ],
     },
@@ -161,18 +162,19 @@ export default {
         {
           name: 'a-function-1',
           type: 'cloud-function',
-          config: { memory: 1000 },
+          config: {memory: 1000},
         },
         {
           name: 'a-function-2',
           type: 'cloud-function',
-          config: { memory: '$.resources.a-function-1.config.memory' },
+          config: {memory: '$.resources.a-function-1.config.memory'},
         },
       ],
     },
     error: {
       type: 'invalid_reference',
-      message: "Reference error '$.resources.a-function-1.config.memory': 'a-function-1' type 'cloud-function' cannot be referenced",
+      message:
+        "Reference error '$.resources.a-function-1.config.memory': 'a-function-1' type 'cloud-function' cannot be referenced",
     },
   },
 
