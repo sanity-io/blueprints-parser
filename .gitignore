@@ -1,4 +1,4 @@
-.tap/
+lcov.info
 node_modules/
 
 mise.toml

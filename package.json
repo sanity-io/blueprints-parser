@@ -18,8 +18,9 @@
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "scripts": {
-    "test": "npm run test:unit && npm run test:integration",
-    "test:unit": "npx tap run --include=test/unit/**/* --coverage-report=text --coverage-report=lcov --no-browser",
+    "test": "npm run test:unit && npm run test:integration && npm run lint",
+    "test:unit": "node --test test/unit/index.test.js",
+    "test:unit:coverage": "node --test --experimental-test-coverage --test-coverage-exclude=\"test/**\" --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=lcov.info test/unit/index.test.js",
     "test:integration": "cd test/integration && npm test",
     "lint": "biome ci",
     "lint:write": "biome check --write"
@@ -30,10 +31,9 @@
   },
   "author": "Sanity.io <hello@sanity.io>",
   "devDependencies": {
-    "@biomejs/biome": "^2.3.14",
+    "@biomejs/biome": "^2.5.8",
     "@sanity/blueprints-jsonschemas": "^0.1.1",
-    "ajv": "^8.17.1",
-    "tap": "^21.5.1"
+    "ajv": "^8.20.0"
   },
   "publishConfig": {
     "access": "public"
