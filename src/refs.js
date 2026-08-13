@@ -2,13 +2,22 @@ import is from './is.js'
 export default {find, resolve}
 
 /**
- * @param {import('.').Blueprint} validatedBlueprint
- * @param {import('.').ParserOptions} options
- * @returns {Array<import('.').Reference>}
+ * @typedef {import('.').Blueprint} Blueprint
+ * @typedef {import('.').ParserOptions} ParserOptions
+ * @typedef {import('.').Reference} Reference
+ * @typedef {import('.').UnresolvedReference} UnresolvedReference
+ * @typedef {import('.').ReferenceError} ReferenceError
+ * @typedef {import('.').ReferenceEndpoint} ReferenceEndpoint
+ */
+
+/**
+ * @param {Blueprint} validatedBlueprint
+ * @param {ParserOptions} options
+ * @returns {Array<Reference>}
  */
 function find(validatedBlueprint, options) {
   const {debug} = options
-  /** @type {Array<import('.').Reference>} */
+  /** @type {Array<Reference>} */
   const foundRefs = []
 
   /**
@@ -54,21 +63,21 @@ function find(validatedBlueprint, options) {
 }
 
 /**
- * @param {import('.').Blueprint} blueprint
- * @param {Array<import('.').Reference>} foundRefs
- * @param {import('.').ParserOptions} options
+ * @param {Blueprint} blueprint
+ * @param {Array<Reference>} foundRefs
+ * @param {ParserOptions} options
  * @returns {{
- *   resolvedBlueprint: import('.').Blueprint
- *   unresolvedRefs: Array<import('.').UnresolvedReference> | undefined
- *   refErrors: Array<import('.').ReferenceError>
+ *   resolvedBlueprint: Blueprint
+ *   unresolvedRefs: Array<UnresolvedReference> | undefined
+ *   refErrors: Array<ReferenceError>
  * }}
  */
 function resolve(blueprint, foundRefs, options) {
   const {parameters = {}, invalidReferenceTypes} = options
 
-  /** @type {Record<string, import('.').Reference>} */
+  /** @type {Record<string, Reference>} */
   const refs = {}
-  /** @type {Array<import('.').UnresolvedReference>} */
+  /** @type {Array<UnresolvedReference>} */
   const unresolvedRefs = []
   const refErrors = []
   for (const foundRef of foundRefs) {
@@ -154,14 +163,14 @@ function resolve(blueprint, foundRefs, options) {
 
 /**
  * Create an unresolved reference from a found reference.
- * @param {import('.').Reference} foundRef
- * @returns {import('.').UnresolvedReference}
+ * @param {Reference} foundRef
+ * @returns {UnresolvedReference}
  */
 function unresolvedReference(foundRef) {
   return {
     path: foundRef.path,
     ref: foundRef.ref,
-    source: endpoint(foundRef.ref.startsWith('$.') ? foundRef.ref.slice(2) : foundRef.ref),
+    source: endpoint(foundRef.ref.slice(2)),
     target: endpoint(foundRef.path),
   }
 }
@@ -169,7 +178,7 @@ function unresolvedReference(foundRef) {
 /**
  * Create a reference endpoint from a location string.
  * @param {string} location
- * @returns {import('.').ReferenceEndpoint}
+ * @returns {ReferenceEndpoint}
  */
 function endpoint(location) {
   const [collection, name, ...path] = location.split('.')

@@ -244,4 +244,44 @@ export default {
       message: "Reference error '$.parameters.memory': 'memory' not found in passed parameters",
     },
   },
+
+  // collection-only reference has no name to resolve
+  repeatedCollectionOnlyReference: {
+    input: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {
+            first: '$.resources',
+            second: '$.resources',
+          },
+        },
+      ],
+    },
+    expected: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {
+            first: '$.resources',
+            second: '$.resources',
+          },
+        },
+      ],
+    },
+    unresolved: [
+      {
+        path: 'resources.a-function.config.second',
+        ref: '$.resources',
+        source: {collection: 'resources', name: '', path: ''},
+        target: {collection: 'resources', name: 'a-function', path: 'config.second'},
+      },
+    ],
+    error: {
+      type: 'missing_resource',
+      message: "Reference error '$.resources': 'undefined' not found in blueprint resources",
+    },
+  },
 }
