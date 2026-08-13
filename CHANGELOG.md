@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/sanity-io/blueprints-parser/compare/v0.4.0...v0.5.0) (2026-08-13)
+
+
+### Features
+
+* unresolvedRef gets source and target results ([#18](https://github.com/sanity-io/blueprints-parser/issues/18)) ([81c5bdd](https://github.com/sanity-io/blueprints-parser/commit/81c5bdd5f01bf1a2f54df7bb352bce4e917a99d9))
+
 ## [0.4.0](https://github.com/sanity-io/blueprints-parser/compare/v0.3.1...v0.4.0) (2026-02-11)
 
 
