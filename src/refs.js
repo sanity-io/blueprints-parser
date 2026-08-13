@@ -81,7 +81,7 @@ function resolve(blueprint, foundRefs, options) {
     if (refs[ref]) {
       if (refType === 'resources') {
         // all resources references must be resolved during deployment
-        unresolvedRefs.push({path: foundRef.path, ref: foundRef.ref})
+        unresolvedRefs.push(unresolvedReference(foundRef))
       } else {
         foundRef.container[foundRef.property] = refs[ref].container[refs[ref].property]
       }
@@ -129,7 +129,7 @@ function resolve(blueprint, foundRefs, options) {
           })
         } else {
           // all resources references must be resolved during deployment
-          unresolvedRefs.push({path: foundRef.path, ref: foundRef.ref})
+          unresolvedRefs.push(unresolvedReference(foundRef))
         }
       } else {
         refErrors.push({
@@ -150,4 +150,29 @@ function resolve(blueprint, foundRefs, options) {
     unresolvedRefs: unresolvedRefs.length ? unresolvedRefs : undefined,
     refErrors,
   }
+}
+
+/**
+ * Create an unresolved reference from a found reference.
+ * @param {import('.').Reference} foundRef
+ * @returns {import('.').UnresolvedReference}
+ */
+function unresolvedReference(foundRef) {
+  return {
+    path: foundRef.path,
+    ref: foundRef.ref,
+    source: endpoint(foundRef.ref.startsWith('$.') ? foundRef.ref.slice(2) : foundRef.ref),
+    target: endpoint(foundRef.path),
+  }
+}
+
+/**
+ * Create a reference endpoint from a location string.
+ * @param {string} location
+ * @returns {import('.').ReferenceEndpoint}
+ */
+function endpoint(location) {
+  const [collection, name, ...path] = location.split('.')
+
+  return {collection, name: name ?? '', path: path.join('.')}
 }

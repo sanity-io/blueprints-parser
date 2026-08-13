@@ -235,6 +235,8 @@ export default {
       {
         path: 'resources.another-function.config.disk',
         ref: '$.resources.a-function.config.disk',
+        source: {collection: 'resources', name: 'a-function', path: 'config.disk'},
+        target: {collection: 'resources', name: 'another-function', path: 'config.disk'},
       },
     ],
     error: {

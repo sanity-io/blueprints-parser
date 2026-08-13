@@ -141,6 +141,8 @@ export default {
       {
         path: 'resources.a-function.config.memory',
         ref: '$.resources.another-function.config.env.memory',
+        source: {collection: 'resources', name: 'another-function', path: 'config.env.memory'},
+        target: {collection: 'resources', name: 'a-function', path: 'config.memory'},
       },
     ],
   },
@@ -178,6 +180,8 @@ export default {
       {
         path: 'resources.a-function.projects[1]',
         ref: '$.resources.a-project.name',
+        source: {collection: 'resources', name: 'a-project', path: 'name'},
+        target: {collection: 'resources', name: 'a-function', path: 'projects[1]'},
       },
     ],
   },
@@ -228,6 +232,12 @@ export default {
       {
         path: 'resources.a-function.config.settings[0].projects[2]',
         ref: '$.resources.a-project.name',
+        source: {collection: 'resources', name: 'a-project', path: 'name'},
+        target: {
+          collection: 'resources',
+          name: 'a-function',
+          path: 'config.settings[0].projects[2]',
+        },
       },
     ],
   },
@@ -358,14 +368,20 @@ export default {
       {
         path: 'resources.another-function.config.memory',
         ref: '$.resources.a-function.config.memory',
+        source: {collection: 'resources', name: 'a-function', path: 'config.memory'},
+        target: {collection: 'resources', name: 'another-function', path: 'config.memory'},
       },
       {
         path: 'outputs.configured-memory-1.value',
         ref: '$.resources.another-function.config.memory',
+        source: {collection: 'resources', name: 'another-function', path: 'config.memory'},
+        target: {collection: 'outputs', name: 'configured-memory-1', path: 'value'},
       },
       {
         path: 'outputs.configured-memory-2.value',
         ref: '$.resources.another-function.config.memory',
+        source: {collection: 'resources', name: 'another-function', path: 'config.memory'},
+        target: {collection: 'outputs', name: 'configured-memory-2', path: 'value'},
       },
     ],
   },
@@ -403,6 +419,8 @@ export default {
       {
         path: 'resources.a-function.projects[2]',
         ref: '$.resources.a-project.name',
+        source: {collection: 'resources', name: 'a-project', path: 'name'},
+        target: {collection: 'resources', name: 'a-function', path: 'projects[2]'},
       },
     ],
   },
@@ -452,6 +470,51 @@ export default {
       {
         path: 'resources.a-function.config.settings[0].projects[0]',
         ref: '$.resources.a-project.name',
+        source: {collection: 'resources', name: 'a-project', path: 'name'},
+        target: {
+          collection: 'resources',
+          name: 'a-function',
+          path: 'config.settings[0].projects[0]',
+        },
+      },
+    ],
+  },
+
+  unresolvedRootReference: {
+    input: {
+      resources: [
+        {
+          name: 'a-project',
+          type: 'cloud-project',
+        },
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          project: '$.resources.a-project',
+        },
+      ],
+    },
+
+    expected: {
+      resources: [
+        {
+          name: 'a-project',
+          type: 'cloud-project',
+        },
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          project: '$.resources.a-project',
+        },
+      ],
+    },
+
+    unresolved: [
+      {
+        path: 'resources.a-function.project',
+        ref: '$.resources.a-project',
+        source: {collection: 'resources', name: 'a-project', path: ''},
+        target: {collection: 'resources', name: 'a-function', path: 'project'},
       },
     ],
   },
