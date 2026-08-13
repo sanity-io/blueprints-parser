@@ -235,11 +235,53 @@ export default {
       {
         path: 'resources.another-function.config.disk',
         ref: '$.resources.a-function.config.disk',
+        source: {collection: 'resources', name: 'a-function', path: 'config.disk'},
+        target: {collection: 'resources', name: 'another-function', path: 'config.disk'},
       },
     ],
     error: {
       type: 'missing_parameter',
       message: "Reference error '$.parameters.memory': 'memory' not found in passed parameters",
+    },
+  },
+
+  // collection-only reference has no name to resolve
+  repeatedCollectionOnlyReference: {
+    input: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {
+            first: '$.resources',
+            second: '$.resources',
+          },
+        },
+      ],
+    },
+    expected: {
+      resources: [
+        {
+          name: 'a-function',
+          type: 'cloud-function',
+          config: {
+            first: '$.resources',
+            second: '$.resources',
+          },
+        },
+      ],
+    },
+    unresolved: [
+      {
+        path: 'resources.a-function.config.second',
+        ref: '$.resources',
+        source: {collection: 'resources', name: '', path: ''},
+        target: {collection: 'resources', name: 'a-function', path: 'config.second'},
+      },
+    ],
+    error: {
+      type: 'missing_resource',
+      message: "Reference error '$.resources': 'undefined' not found in blueprint resources",
     },
   },
 }

@@ -83,16 +83,34 @@ export type ValidationError = {
   message: string
 }
 
-/** A reference that could not be resolved during parsing */
-export type UnresolvedReference = {
+/** Where a reference points, or where it was found */
+export type ReferenceEndpoint = {
+  /** The top-level collection, e.g. `resources`, `values`, `outputs` */
+  collection: string
+  /** The name of the item within that collection */
+  name: string
+  /** The path within that item, empty when the reference is to the item itself */
+  path: string
+}
+
+/** The location and content of a reference */
+export type ReferenceLocation = {
   /** The location where the reference was found */
   path: string
   /** The content of the reference (e.g. $.resources.project-1.id) */
   ref: string
 }
 
+/** A reference that could not be resolved during parsing */
+export type UnresolvedReference = ReferenceLocation & {
+  /** `ref` in split form: where the value will come from */
+  source: ReferenceEndpoint
+  /** `path` in split form: where the value belongs */
+  target: ReferenceEndpoint
+}
+
 /** A reference found during parsing */
-export type Reference = UnresolvedReference & {
+export type Reference = ReferenceLocation & {
   /** The object or array containing the reference */
   container: object | Array
   /** The key or index of the reference in the container */
