@@ -45,7 +45,7 @@ function find(validatedBlueprint, options) {
     }
   }
 
-  /* c8 ignore next 4 */
+  /* node:coverage ignore next 4 */
   if (debug) {
     console.log(`[Debug] Found ${foundRefs.length} references:`, foundRefs.length ? foundRefs : '')
   }

@@ -63,7 +63,7 @@ export default function blueprintParserValidator(input, options = {}) {
 
     return output
 
-    /* c8 ignore next 4 */
+    /* node:coverage ignore next 4 */
   } catch (error) {
     console.log('Unknown Blueprint error', error)
     throw error
