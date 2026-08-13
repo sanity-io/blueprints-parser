@@ -20,14 +20,14 @@
   "scripts": {
     "test": "npm run test:unit && npm run test:integration && npm run lint",
     "test:unit": "node --test test/unit/index.test.js",
-    "test:unit:coverage": "node --test --experimental-test-coverage --test-coverage-exclude=\"test/**\" --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=lcov.info test/unit/index.test.js",
+    "test:unit:coverage": "node --test --experimental-test-coverage --test-coverage-exclude=\"test/**\" --test-coverage-lines=100 --test-coverage-branches=100 --test-coverage-functions=100 test/unit/index.test.js",
     "test:integration": "cd test/integration && npm test",
     "lint": "biome ci",
     "lint:write": "biome check --write"
   },
   "license": "MIT",
   "engines": {
-    "node": ">=20.19 <22 || >=22.12"
+    "node": ">=22.12"
   },
   "author": "Sanity.io <hello@sanity.io>",
   "devDependencies": {

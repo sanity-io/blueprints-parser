@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read # for checkout
+  contents: read
 
 jobs:
   lint:
@@ -32,7 +32,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Run the testing suite on each major OS with the latest LTS release of Node.js
         os: [macos-latest, ubuntu-latest, windows-latest]
         node-version: [22, 24, 26]
     steps:
@@ -47,10 +46,7 @@ jobs:
 
   coverage:
     permissions:
-      # Required to checkout the code
       contents: read
-      # Required to put a comment into the pull-request
-      pull-requests: write
     name: Coverage
     runs-on: ubuntu-latest
     steps:
@@ -58,12 +54,6 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           cache: npm
-          # --test-coverage-exclude requires Node.js >= 22.5
           node-version: lts/*
       - run: npm ci
       - run: npm run test:unit:coverage
-      - uses: vebr/jest-lcov-reporter@v0.2.1
-        if: github.event_name == 'pull_request'
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: lcov.info
